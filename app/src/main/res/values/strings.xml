@@ -4,4 +4,6 @@
     <string name="max_min_temperature">%d°C/%d°C</string>
     <string name="search">Search</string>
     <string name="refresh">Refresh</string>
+    <string name="hours">Hours</string>
+    <string name="days">Days</string>
 </resources>

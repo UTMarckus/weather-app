@@ -5,7 +5,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.Scaffold
-import com.utmarckus.weatherapp.screens.MainScreen
+import com.utmarckus.weatherapp.screens.HomeScreen
+import com.utmarckus.weatherapp.screens.MainCard
 import com.utmarckus.weatherapp.ui.theme.WeatherAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -15,7 +16,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             WeatherAppTheme {
                 Scaffold() { innerPadding ->
-                    MainScreen(contentPadding = innerPadding)
+                    HomeScreen(contentPadding = innerPadding)
                 }
             }
         }

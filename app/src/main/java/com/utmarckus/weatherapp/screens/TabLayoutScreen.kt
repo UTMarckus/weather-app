@@ -15,6 +15,7 @@ import androidx.compose.material.TabRow
 import androidx.compose.material.TabRowDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,13 +26,19 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
+import com.utmarckus.weatherapp.model.WeatherModel
+import com.utmarckus.weatherapp.network.getWeatherByHours
 import com.utmarckus.weatherapp.ui.theme.BlueLight
 import com.utmarckus.weatherapp.ui.theme.WeatherAppTheme
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TabLayout(modifier: Modifier = Modifier) {
+fun TabLayout(
+    daysList: MutableState<List<WeatherModel>>,
+    currentDay: MutableState<WeatherModel>,
+    modifier: Modifier = Modifier
+) {
     val tabList = listOf("HOURS", "DAYS")
     val pagerState = rememberPagerState()
     val tabIndex = pagerState.currentPage
@@ -74,15 +81,11 @@ fun TabLayout(modifier: Modifier = Modifier) {
             state = pagerState,
             modifier = Modifier.weight(1f)
         ) { index ->
-            LazyColumn(
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                contentPadding = PaddingValues(vertical = 8.dp),
-                modifier = Modifier
-            ) {
-                items(List(50) { 1 }) { item ->
-                    ListItem()
-                }
-            }
+            val list = if (index == 0)
+                getWeatherByHours(currentDay.value.hours)
+            else
+                daysList.value
+            MainList(list, currentDay)
         }
     }
 }
@@ -91,6 +94,6 @@ fun TabLayout(modifier: Modifier = Modifier) {
 @Composable
 fun TabLayoutPreview() {
     WeatherAppTheme() {
-        TabLayout()
+        // TabLayout()
     }
 }

@@ -51,7 +51,8 @@ dependencies {
     // Accompanist pager
     implementation("com.google.accompanist:accompanist-pager:0.25.1")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.25.1")
-
+    // Volley
+    implementation("com.android.volley:volley:1.2.1")
 
 
     testImplementation(libs.junit)

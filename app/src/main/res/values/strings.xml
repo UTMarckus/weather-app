@@ -1,9 +1,13 @@
 <resources>
     <string name="app_name">Weather App</string>
-    <string name="current_temperature">%d°C</string>
-    <string name="max_min_temperature">%d°C/%d°C</string>
+    <string name="current_temperature">%s°C</string>
+    <string name="max_min_temperature">%s°C/%s°C</string>
     <string name="search">Search</string>
     <string name="refresh">Refresh</string>
     <string name="hours">Hours</string>
     <string name="days">Days</string>
+    <string name="icon_link">https:%s</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="enter_city">Enter city name:</string>
 </resources>

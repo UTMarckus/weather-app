@@ -1,5 +1,6 @@
 package com.utmarckus.weatherapp.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,17 +22,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.utmarckus.weatherapp.R
+import com.utmarckus.weatherapp.model.WeatherModel
 import com.utmarckus.weatherapp.ui.theme.BlueLight
 import com.utmarckus.weatherapp.ui.theme.WeatherAppTheme
 
 @Composable
-fun ListItem(modifier: Modifier = Modifier) {
+fun ListItem(
+    item: WeatherModel,
+    currentDay: MutableState<WeatherModel>,
+    modifier: Modifier = Modifier
+) {
     Card(
         colors = CardDefaults.cardColors(containerColor = BlueLight),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
         shape = RoundedCornerShape(8.dp),
         modifier = modifier
             .fillMaxWidth()
+            .clickable {
+                if (item.hours.isEmpty()) return@clickable
+                currentDay.value = item
+            }
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -41,20 +52,29 @@ fun ListItem(modifier: Modifier = Modifier) {
         ) {
             Column() {
                 Text(
-                    text = "12:00",
+                    text = item.time,
                 )
                 Text(
-                    text = "Sunny",
+                    text = item.conditionText,
                     color = Color.White,
                 )
             }
             Text(
-                text = stringResource(R.string.current_temperature, 25),
+                text = if (item.currentTemp.isEmpty()) {
+                    stringResource(
+                        R.string.max_min_temperature,
+                        item.maxTemp, item.minTemp)
+                } else {
+                    stringResource(
+                        R.string.current_temperature,
+                        item.currentTemp
+                    )
+                },
                 fontSize = 24.sp,
                 color = Color.White,
             )
             AsyncImage(
-                model = "https://cdn.weatherapi.com/weather/64x64/day/116.png",
+                model = stringResource(R.string.icon_link, item.conditionIcon),
                 contentDescription = null,
                 modifier = Modifier.size(32.dp)
             )
@@ -66,6 +86,31 @@ fun ListItem(modifier: Modifier = Modifier) {
 @Composable
 fun ListItemPreview() {
     WeatherAppTheme(){
-        ListItem()
+        Column(Modifier.fillMaxWidth()){
+//            ListItem(
+//                WeatherModel(
+//                    city = "London",
+//                    time = "12:00",
+//                    currentTemp = "25",
+//                    conditionText = "Sunny",
+//                    conditionIcon = "//cdn.weatherapi.com/weather/64x64/day/116.png",
+//                    maxTemp = "27",
+//                    minTemp = "20",
+//                    hours = "",
+//                )
+//            )
+//            ListItem(
+//                WeatherModel(
+//                    city = "London",
+//                    time = "12:00",
+//                    currentTemp = "",
+//                    conditionText = "Sunny",
+//                    conditionIcon = "//cdn.weatherapi.com/weather/64x64/day/116.png",
+//                    maxTemp = "27",
+//                    minTemp = "20",
+//                    hours = "",
+//                )
+//            )
+        }
     }
 }

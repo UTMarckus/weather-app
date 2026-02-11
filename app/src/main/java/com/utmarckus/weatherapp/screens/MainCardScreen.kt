@@ -16,6 +16,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,11 +26,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.utmarckus.weatherapp.R
+import com.utmarckus.weatherapp.model.WeatherModel
 import com.utmarckus.weatherapp.ui.theme.BlueLight
 import com.utmarckus.weatherapp.ui.theme.WeatherAppTheme
 
 @Composable
-fun MainCard(modifier: Modifier = Modifier) {
+fun MainCard(
+    currentDay: MutableState<WeatherModel>,
+    onClickSearch: () -> Unit,
+    onClickSync: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Card(
         colors = CardDefaults.cardColors(containerColor = BlueLight),
         shape = RoundedCornerShape(8.dp),
@@ -47,28 +54,42 @@ fun MainCard(modifier: Modifier = Modifier) {
                     .padding(vertical = 8.dp, horizontal = 12.dp)
             ) {
                 Text(
-                    text = "7 Feb 2026 16:00",
+                    text = currentDay.value.time,
                     fontSize = 16.sp,
                     color = Color.White
                 )
                 AsyncImage(
-                    model = "https://cdn.weatherapi.com/weather/64x64/day/116.png",
+                    model = stringResource(
+                        R.string.icon_link,
+                        currentDay.value.conditionIcon
+                    ),
                     contentDescription = null,
                     modifier = Modifier.size(32.dp)
                 )
             }
             Text(
-                text = "Madrid",
+                text = currentDay.value.city,
                 fontSize = 24.sp,
                 color = Color.White
             )
             Text(
-                text = stringResource(R.string.current_temperature, 24),
-                fontSize = 64.sp,
+                text = if (currentDay.value.currentTemp.isEmpty()) {
+                    stringResource(
+                        R.string.max_min_temperature,
+                        currentDay.value.maxTemp,
+                        currentDay.value.minTemp
+                        )
+                } else {
+                    stringResource(
+                        R.string.current_temperature,
+                        currentDay.value.currentTemp
+                    )
+                },
+                fontSize = 56.sp,
                 color = Color.White
             )
             Text(
-                text = "Sunny",
+                text = currentDay.value.conditionText,
                 fontSize = 16.sp,
                 color = Color.White
             )
@@ -77,7 +98,7 @@ fun MainCard(modifier: Modifier = Modifier) {
                 modifier = Modifier.fillMaxWidth()
             ) {
                 IconButton(
-                    onClick = {},
+                    onClick = { onClickSearch() },
                 ) {
                     Icon(
                         imageVector = Icons.Default.Search,
@@ -86,12 +107,16 @@ fun MainCard(modifier: Modifier = Modifier) {
                     )
                 }
                 Text(
-                    text = stringResource(R.string.max_min_temperature, 25, 15),
+                    text = stringResource(
+                        R.string.max_min_temperature,
+                        currentDay.value.maxTemp,
+                        currentDay.value.minTemp
+                    ),
                     fontSize = 16.sp,
                     color = Color.White
                 )
                 IconButton(
-                    onClick = {},
+                    onClick = { onClickSync() },
                 ) {
                     Icon(
                         imageVector = Icons.Default.Refresh,
@@ -108,6 +133,6 @@ fun MainCard(modifier: Modifier = Modifier) {
 @Composable
 fun MainCardPreview() {
     WeatherAppTheme() {
-        MainCard()
+        //MainCard()
     }
 }
